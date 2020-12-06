@@ -1,5 +1,4 @@
 # Set variables
-COUNTER=-1
 STEP_COUNTER=0
 CURRENT_RESULT=""
 TOTAL_RESULT=()
@@ -18,6 +17,11 @@ do
     read USER_INPUT
 
   else
+    # Clear variables of a last loop 
+    NUMBER=""
+    NEW_NUMBER=""
+    COUNTER=-1
+
     STEP_COUNTER=$(( STEP_COUNTER + 1 ))
 
     # Generate a number with 4 unique digits
@@ -26,25 +30,26 @@ do
       COUNTER=$(( $COUNTER + 1 ))
       
       # Make sure in uniqueness of a digit
-      while [[ ${NUMBER:COUNTER:1} == $NEW_NUMBER ]] || \
-        [[ ${NUMBER:COUNTER-1:1} == $NEW_NUMBER ]] || \
-        [[ ${NUMBER:COUNTER-2:1} == $NEW_NUMBER ]];
+      while [[ ${NUMBER:COUNTER:1} == $NEW_NUMBER ]] \
+        || [[ ${NUMBER:COUNTER-1:1} == $NEW_NUMBER ]] \
+        || [[ ${NUMBER:COUNTER-2:1} == $NEW_NUMBER ]] \
+        || [[ ${NUMBER:COUNTER-3:1} == $NEW_NUMBER ]];
       do
         NEW_NUMBER=$(( RANDOM % 10 ))
       done
 
       NUMBER="$NUMBER$NEW_NUMBER"
+      CURRENT_RESULT="$STEP_COUNTER. $NUMBER (Коров - 3, Быков - 1)"
     done
 
-    CURRENT_RESULT="$STEP_COUNTER. $NUMBER (Коров - 3, Быков - 1)"
     TOTAL_RESULT+=("$CURRENT_RESULT")
-  fi
 
-  # Show conclusion
-  for VALUE in "${TOTAL_RESULT[@]}"
-  do
-    echo $VALUE
-  done
-  echo $CALL_TO_ACTION
-  read USER_INPUT
+    # Show conclusion
+    for VALUE in "${TOTAL_RESULT[@]}"
+    do
+      echo $VALUE
+    done
+    echo $CALL_TO_ACTION
+    read USER_INPUT
+  fi
 done
