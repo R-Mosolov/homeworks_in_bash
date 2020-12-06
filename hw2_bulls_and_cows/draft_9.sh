@@ -10,26 +10,32 @@ read USER_INPUT
 
 while [[ "$USER_INPUT" -ne "q" ]]
 do
+  # The preparations to check uniqueness of digits
+  IS_NONUNIQUE_NUMBERS=false
+  for (( i=0; i<${#USER_INPUT}; i++ ));
+  do
+    for (( j=0; j<${#USER_INPUT}; j++ ));
+    do
+      if [ ${USER_INPUT:$i:1} == ${USER_INPUT:$j:1} ] && [ $i != $j ]
+      then
+        IS_NONUNIQUE_NUMBERS=true
+      fi
+    done
+  done
+  
   # Add an error handler: a wrong number
   if [ ${#USER_INPUT} -gt 4 ] || [ ${#USER_INPUT} -lt 4 ]
   then
     echo "К сожалению, Вы ввели число, состоящее не из 4 цифр. Пожалуйста, повторите попытку:".
     read USER_INPUT
 
-  else
-    # Add an error handler: nonunique digits in a number
-    for DIGIT in "${USER_INPUT[@]}"
-    do
-      if [ $DIGIT == $USER_INPUT[0] ] \
-        || [ $DIGIT == $USER_INPUT[1] ] \
-        || [ $DIGIT == $USER_INPUT[2] ] \
-        || [ $DIGIT == $USER_INPUT[3] ]
-      then
-        echo "К сожалению, Вы ввели число, некоторые цифры которого повторяются. Пожалуйста, повторите попытку:".
-        read USER_INPUT
-      fi
-    done
+  # Add an error handler: nonunique digits of a number
+  elif [ $IS_NONUNIQUE_NUMBERS == true ]
+  then
+    echo "К сожалению, Вы ввели число, некоторые цифры которого повторяются. Пожалуйста, повторите попытку:"
+    read USER_INPUT
 
+  else
     # Clear variables of a last loop 
     NUMBER=""
     NEW_NUMBER=""

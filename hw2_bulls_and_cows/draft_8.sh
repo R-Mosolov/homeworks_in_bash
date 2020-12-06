@@ -17,17 +17,15 @@ do
     read USER_INPUT
 
   else
-    # Add an error handler: nonunique digits in a number
-    for DIGIT in "${USER_INPUT[@]}"
+    for (( i=0; i<${#USER_INPUT}; i++ ));
     do
-      if [ $DIGIT == $USER_INPUT[0] ] \
-        || [ $DIGIT == $USER_INPUT[1] ] \
-        || [ $DIGIT == $USER_INPUT[2] ] \
-        || [ $DIGIT == $USER_INPUT[3] ]
-      then
-        echo "К сожалению, Вы ввели число, некоторые цифры которого повторяются. Пожалуйста, повторите попытку:".
-        read USER_INPUT
-      fi
+      for (( j=0; j<${#USER_INPUT}; j++ ));
+      do
+        if [ ${USER_INPUT:$i:1} == ${USER_INPUT:$j:1} ] && [ $i != $j ]
+        then
+          echo "К сожалению, Вы ввели число, некоторые цифры которого повторяются. Пожалуйста, повторите попытку:"
+        fi
+      done
     done
 
     # Clear variables of a last loop 
